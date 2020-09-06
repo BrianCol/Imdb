@@ -9,8 +9,11 @@ library(devtools)
 install_github("easyGgplot2", "kassambara")
 
 #Read in data
-imdb <- read.csv("./IMDBTrain.csv")
+imdb.train <- read.csv("./IMDBTrain.csv")
 imdb.test <- read.csv("./IMDBTest.csv")
+
+names(imdb.test)[names((imdb.test)=="Id")] <- "movie_title"
+imdb <- bind_rows(train=imdb.train, test=imdb.test, id="Set")
 
 ##
 ##Explorator Data Analysis 
@@ -38,9 +41,25 @@ with(imdb, cor(gross, imdb_score, use="complete.obs"))
 
 #Look at next four columns
 #Group five (column 20-24)
-'imdb[1,20:24]
-'sum(apply(is.na(imdb[,20:24]), 1, sum)<=0)
+imdb[1,20:24]
+dim(imdb[,20:24])
+sum(apply(is.na(imdb[,20:24]), 1, sum)<=0)
 barplot(data = imdb$language)
 ggplot(data = imdb, mapping = aes(x = title_year, y = imdb_score)) + geom_point()
 ggplot(data = imdb, mapping = aes(x = title_year, y = imdb_score)) + geom_point()
+
+
+#aspect ration, content_rating, face_number_in_poster, num_user_for_review, num_voted_user, title_year, movie_title
+#stuff for new data
+movies.sub <-  movies(,c("aspect_ratio", "content)rating", "facenumber_in_poster"))
+attach(movies.sub)
+#maybe drop aspect 
+
+#Content Rating
+#Change NA to Not Rated
+movies$content_rating[which(is.na(content_rating))] <- "Not Rated"
+
+#look at nlp 
+#look at each word in title
+
 
